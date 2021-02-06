@@ -28,7 +28,7 @@ type Message =
     | Increment
     | Decrement
     | Reset
-    | SetStep of string
+    | SetStep of int
     | KeyDown of string * string
     | EnterValue of string
     | ClearEnteredValues
@@ -44,7 +44,7 @@ let update message model =
     | Increment -> { model with value = model.value + model.step }
     | Decrement -> { model with value = model.value - model.step }
     | Reset -> { model with value = 0; step = 1 }
-    | SetStep step -> { model with step =  int step }
+    | SetStep step -> { model with step = int step }
     | KeyDown (key, keyCode) -> { model with key = key; keyCode = keyCode }
     | EnterValue value -> { model with enteredValues = model.enteredValues @ [value] }
     | ClearEnteredValues -> { model with enteredValues = [] }
@@ -57,7 +57,7 @@ let view model dispatch =
         match model.page with
         | 1 ->
             Counter()
-                .Step(string model.step, fun step -> dispatch (SetStep step))
+                .Step(string model.step, fun step -> dispatch (SetStep (int step)))
                 .Key(model.key)
                 .KeyCode(model.keyCode)
                 .KeyDown(fun key -> dispatch (KeyDown (key.Key, key.Code)))

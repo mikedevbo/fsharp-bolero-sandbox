@@ -1,0 +1,12 @@
+<div>
+    <label>Enter value and press ENTER: <input type="text" bind-onchange="${NewValue}"/></label>
+    <div><span>Entered Values:</span></div>
+    ${EnteredValues}
+    <div><button onclick="${ClearEnteredValues}">Clear</button></div>
+</div>
+
+<template id="EnteredValue">
+    <div>
+        <span>${Value}</span>
+    </div>
+</template>

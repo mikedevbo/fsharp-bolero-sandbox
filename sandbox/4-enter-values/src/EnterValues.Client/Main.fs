@@ -26,7 +26,6 @@ let update message model =
     | ClearValues -> { model with enteredValues = [] }
 
 let view model dispatch =
-
     EnterValuesTemplate()
         .EnteredValues(forEach model.enteredValues (fun value -> EnterValuesTemplate.ShowValue().Value(value).Elt()))
         .NewValue("", fun value -> dispatch (NewValue value))

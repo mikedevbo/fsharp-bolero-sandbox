@@ -15,22 +15,22 @@ let initModel =
     }
 
 type Message =
-    | EnterValue of string
-    | ClearEnteredValues
+    | NewValue of string
+    | ClearValues
 
-type EnterValues = Template<"wwwroot/enterValues.html">
+type EnterValuesTemplate = Template<"wwwroot/enterValues.html">
 
 let update message model =
     match message with
-    | EnterValue value -> { model with enteredValues = model.enteredValues @ [value] }
-    | ClearEnteredValues -> { model with enteredValues = [] }
+    | NewValue value -> { model with enteredValues = model.enteredValues @ [value] }
+    | ClearValues -> { model with enteredValues = [] }
 
 let view model dispatch =
 
-    EnterValues()
-        .EnteredValues(forEach model.enteredValues (fun value -> EnterValues.EnteredValue().Value(value).Elt()))
-        .NewValue("", fun value -> dispatch (EnterValue value))
-        .ClearEnteredValues(fun _ -> dispatch ClearEnteredValues)
+    EnterValuesTemplate()
+        .EnteredValues(forEach model.enteredValues (fun value -> EnterValuesTemplate.ShowValue().Value(value).Elt()))
+        .NewValue("", fun value -> dispatch (NewValue value))
+        .ClearValues(fun _ -> dispatch ClearValues)
         .Elt()
 
 type MyApp() =

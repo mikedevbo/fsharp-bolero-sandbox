@@ -1,0 +1,16 @@
+<h1>No Components</h1>
+${NickNameInput}
+${WebsiteInput}
+${SportInput}
+<br />
+<h1>View Components</h1>
+${NickNameInputComp}
+${WebsiteInputComp}
+${SportInputComp}
+
+<template id="InputValue">
+    <div>
+        <label>${Label}: <input type="text" bind="${Value}"/></label>
+        <label>Last Update: ${ValueRenderDate}</label>
+    </div>
+</template>

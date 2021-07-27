@@ -11,6 +11,7 @@ open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
+open Bolero.Remoting.Server
 
 type Startup(configuration: IConfiguration) =
     member _.Configuration = configuration
@@ -19,6 +20,8 @@ type Startup(configuration: IConfiguration) =
     member _.ConfigureServices(services: IServiceCollection) =
         // Add framework services.
         services.AddControllers() |> ignore
+        services.AddRemoting<SimpleServiceHandler>()
+                .AddCors() |> ignore
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     member _.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
@@ -29,4 +32,9 @@ type Startup(configuration: IConfiguration) =
            .UseAuthorization()
            .UseEndpoints(fun endpoints ->
                 endpoints.MapControllers() |> ignore
-            ) |> ignore
+            )
+           .UseCors(fun policy ->
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader() |> ignore
+             ) |> ignore

@@ -11,4 +11,8 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Bolero.Server" Version="0.17.25" />
+  </ItemGroup>
+
 </Project>

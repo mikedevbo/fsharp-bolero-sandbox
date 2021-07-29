@@ -3,29 +3,45 @@ module Remoting.Client.Client.Main
 open Elmish
 open Bolero
 open Bolero.Html
+open Bolero.Remoting
+open Remoting.Contracts
 
 type Model =
     {
-        x: string
+        Text: string
     }
 
 let initModel =
     {
-        x = ""
-    }
+        Text = ""
+    }, Cmd.none
 
 type Message =
-    | Ping
+    | GetHello
+    | ShowHello of string
+    | ShowError of exn    
 
-let update message model =
+let update simpleService message model =
     match message with
-    | Ping -> model
+    | GetHello -> model, Cmd.OfAsync.either simpleService.GetHello () ShowHello ShowError
+    | ShowHello text -> {model with Text = text}, Cmd.none
+    | ShowError exn -> {model with Text = exn.Message}, Cmd.none
+
 
 let view model dispatch =
-    text "Hello, world!"
+    concat [
+        div [] [
+            button [on.click (fun _ -> dispatch GetHello)] [text "GetHello"]
+        ]
+
+        div [] [
+            text model.Text
+        ]
+    ]    
 
 type MyApp() =
     inherit ProgramComponent<Model, Message>()
 
     override this.Program =
-        Program.mkSimple (fun _ -> initModel) update view
+        let simpleService = this.Remote<SimpleService>()
+        Program.mkProgram (fun _ -> initModel) (update simpleService) view
